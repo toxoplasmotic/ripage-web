@@ -1,0 +1,175 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="rpg-character.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="rpg-characters">
+  <template>
+    <!-- Make a request to the Sheets API to get the tab names from the master spreadsheet -->
+    <iron-ajax
+      auto
+      handle-as="json"
+      on-response="handleSheetsResponse"
+      params='{"key": "AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"}'
+      url="https://sheets.googleapis.com/v4/spreadsheets/1pSg0xmfzjdETgjg_nHSWMPuu7vDtAyvVzdRvKuBnrWY"></iron-ajax>
+
+    <!-- Using the tab names, use Sheets API to get character names and player email addresses -->
+    <iron-ajax
+      id="charactersAjax"
+      handle-as="json"
+      on-response="handleCharactersResponse"
+      url="https://sheets.googleapis.com/v4/spreadsheets/1pSg0xmfzjdETgjg_nHSWMPuu7vDtAyvVzdRvKuBnrWY/values:batchGet"></iron-ajax>
+
+    <!-- Get character portraits from Google Drive API -->
+    <iron-ajax
+      id="portraitsAjax"
+      handle-as="json"
+      on-response="handlePortraitsResponse"
+      url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKR3U0MElvYkp2anM%27%20in%20parents%20and%20name%20contains%20%27.png%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
+
+    <template is="dom-repeat" items="{{characters}}" as="character">
+      <rpg-character character="{{character}}"></rpg-character>
+    </template>
+    <slot></slot>
+  </template>
+
+  <script>
+    class RPGCharacters extends Polymer.Element {
+      static get is() { return 'rpg-characters'; }
+
+      static get properties() {
+        return {
+          characters: Array,
+          user: Object
+        };
+      }
+
+      handleSheetsResponse(data){
+        var sheetTitles = data.detail.response.sheets.map(sheet => sheet.properties.title);
+        var params = { 
+          "key": "AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo",
+          "valueRenderOption": "FORMULA",
+          "ranges": sheetTitles.map(title => "'" + title + "'!A1:B1")
+        };
+
+        this.$.charactersAjax.params = params;
+        this.$.charactersAjax.generateRequest();
+      }
+
+      handleCharactersResponse(data){
+        var hyperlinks = data.detail.response.valueRanges.map((item) => {
+          if (item.values[0].length === 2 && item.values[0][0] === "Character:")
+          {
+            return item.values[0][1];
+          }
+        });
+
+        var that = this;
+
+        this.characters = hyperlinks.filter(h => h).map((hyperlink) => {
+          var playerEmail = hyperlink.split('"')[1];
+
+          if (playerEmail)
+          {
+            return {
+              playerEmail: playerEmail.substring(7),
+              characterName: hyperlink.split('"')[3],
+              isUser: that.user.email === playerEmail.substring(7)
+            };
+          }
+          else
+          {
+            return {
+              playerEmail: "???", // Thanks, Malzith!
+              characterName: hyperlink
+            };
+          }
+         });
+
+         var portraitsResponse = {
+          "kind": "drive#fileList",
+          "incompleteSearch": false,
+          "files": [
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKSllTb2pHWjloeTA",
+            "name": "Gizmo.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKU0FHX2xCamlYbm8",
+            "name": "Tex.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKY19CLTgzQ1pQSWs",
+            "name": "Sofi.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKMWVLUzFicHpoc2c",
+            "name": "Mokomi.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKeV93NlRtTkZWSjQ",
+            "name": "Malzith.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKZkZKWnBJWHRIX2s",
+            "name": "Kujo.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKZTBPdGFvTGRWRmM",
+            "name": "Kalder.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKRWxIdFFWdEdqQ3c",
+            "name": "Jim.png",
+            "mimeType": "image/png"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKTk1Fd1kxVU1zVDQ",
+            "name": "Jax.png",
+            "mimeType": "image/png"
+            }
+          ]
+          };
+
+          portraitsResponse.files.forEach(function(file) {
+            var character = that.characters.find(x => x.characterName === file.name.split('.')[0]);
+            if (character)
+            {
+              character.portraitURL = "https://drive.google.com/uc?id=" + file.id;
+            }
+          });
+
+          console.dir(that.characters);
+      }
+
+      handlePortraitsResponse(data){
+        var that = this;
+        data.detail.response.files.forEach(function(file) {
+          var character = that.characters.find(x => x.characterName === file.name.split('.')[0]);
+          if (character)
+          {
+            character.portraitURL = "https://drive.google.com/uc?id=" + file.id;
+          }
+        });
+      }
+    }
+
+    window.customElements.define(RPGCharacters.is, RPGCharacters);
+  </script>
+</dom-module>

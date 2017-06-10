@@ -1,0 +1,32 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="rpg-scene">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <h1>[[scene.planetName]], [[scene.location]]</h1>
+    </div>
+  </template>
+
+  <script>
+    class RPGScene extends Polymer.Element {
+      static get is() { return 'rpg-scene'; }
+
+      static get properties() {
+        return {
+          scene: Object
+        };
+      }
+    }
+
+    window.customElements.define(RPGScene.is, RPGScene);
+  </script>
+</dom-module>
