@@ -19,7 +19,8 @@
     "polymerfire": "firebase/polymerfire#2.0-preview",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.7",
     "iron-image": "PolymerElements/iron-image#2.0-preview",
-    "paper-card": "PolymerElements/paper-card#2.0-preview"
+    "paper-card": "PolymerElements/paper-card#2.0-preview",
+    "google-youtube": "GoogleWebComponents/google-youtube#2.0-preview"
   },
   "resolutions": {
     "polymer": "^2.0.0-rc.3"

@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-scene">
@@ -12,7 +13,24 @@
     </style>
 
     <div class="card">
-      <h1>[[scene.planetName]], [[scene.location]]</h1>
+      <h1>[[scene.planetName]]</h1>
+      <p>[[scene.location]]</p>
+
+      <p>scene.ambientVolume: [[scene.ambientVolume]]</p>
+      <p>scene.musicVolume: [[scene.musicVolume]]</p>
+
+      <google-youtube
+        on-google-youtube-ready="play"
+        volume="[[scene.ambientVolume]]"
+        video-id="[[scene.ambientYoutubeID]]">
+      </google-youtube>
+
+      <google-youtube
+        on-google-youtube-ready="play"
+        volume="[[scene.ambientVolume]]"
+        video-id="[[scene.musicYoutubeID]]">
+      </google-youtube>
+
     </div>
   </template>
 
@@ -24,6 +42,10 @@
         return {
           scene: Object
         };
+      }
+
+      play(event) {
+        event.target.play();
       }
     }
 
