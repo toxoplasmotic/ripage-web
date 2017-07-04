@@ -178,12 +178,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       addScene() {
-        var cergie = {
-          "planetName": "Cergie",
-          "location": "on a boat"
+        var cergieNight = {
+          "ambientVolume" : "100",
+          "ambientYoutubeID" : "Ij57bP-vVbo",
+          "location" : "Treznor Family Farm",
+          "timeOfDay": "Night",
+          "musicVolume" : "10",
+          "musicYoutubeID" : "lsoLYWTzqSY",
+          "planetName" : "Cergie"
         };
 
-        this.$.scenesDocument.ref.push(cergie);
+        var cergieDay = {
+          "ambientVolume" : "100",
+          "ambientYoutubeID" : "SqH1enfPGBc",
+          "location" : "Treznor Family Farm",
+          "timeOfDay": "Day",
+          "musicVolume" : "40",
+          "musicYoutubeID" : "ash-RGayrik",
+          "planetName" : "Cergie"
+        };
+
+        var darhmMarket = {
+          "ambientVolume" : "50",
+          "ambientYoutubeID" : "vHEIImSM1Do",
+          "location" : "Market",
+          "timeOfDay": "Day",
+          "musicVolume" : "40",
+          "musicYoutubeID" : "lsoLYWTzqSY",
+          "planetName" : "Darhm"
+        };
+
+        this.$.scenesDocument.ref.push(cergieNight);
+        this.$.scenesDocument.ref.push(cergieDay);
+        this.$.scenesDocument.ref.push(darhmMarket);
       }
 
       debugMe() {

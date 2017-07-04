@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/google-youtube/google-youtube.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-scene">
@@ -20,16 +21,20 @@
       <p>scene.musicVolume: [[scene.musicVolume]]</p>
 
       <google-youtube
-        on-google-youtube-ready="play"
-        volume="[[scene.ambientVolume]]"
-        video-id="[[scene.ambientYoutubeID]]">
+        id="ambientPlayer"
+        on-google-youtube-ready="setVolume"
+        video-id="{{scene.ambientYoutubeID}}">
       </google-youtube>
+      <paper-input label="Ambient sounds YouTube video ID" value="{{scene.ambientYoutubeID}}"></paper-input>
 
       <google-youtube
+        id="musicPlayer"
         on-google-youtube-ready="play"
-        volume="[[scene.ambientVolume]]"
-        video-id="[[scene.musicYoutubeID]]">
+        volume="{{scene.musicVolume}}"
+        video-id="{{scene.musicYoutubeID}}">
+        
       </google-youtube>
+      <paper-input label="BG music YouTube video ID" value="{{scene.musicYoutubeID}}"></paper-input>
 
     </div>
   </template>
@@ -46,6 +51,10 @@
 
       play(event) {
         event.target.play();
+      }
+
+      setVolume(event) {
+        event.target.setVolume(10);
       }
     }
 
