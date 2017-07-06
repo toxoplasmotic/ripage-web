@@ -19,6 +19,8 @@
       <p>[[scene.location]], [[scene.timeOfDay]]</p>
 
       <google-youtube
+        width="0px"
+        height="0px"
         id="ambientPlayer"
         on-google-youtube-ready="setVolume"
         on-google-youtube-state-change="replay"
@@ -27,6 +29,8 @@
       <paper-input label="Ambient sounds YouTube video ID" value="{{scene.ambientYoutubeID}}"></paper-input>
 
       <google-youtube
+        width="0px"
+        height="0px"
         id="musicPlayer"
         on-google-youtube-ready="setVolume"
         on-google-youtube-state-change="replay"
