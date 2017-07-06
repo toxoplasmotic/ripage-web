@@ -67,6 +67,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
     <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    
+    <!-- Load service worker elements -->
+    <link rel="import" href="bower_components/platinum-sw/platinum-sw-elements.html">
 
     <!-- Load your application shell -->
     <link rel="import" href="src/my-app.html">
@@ -83,10 +86,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
   </head>
   <body>
+    <platinum-sw-register auto-register>
+        <platinum-sw-cache></platinum-sw-cache>
+        <platinum-sw-fetch origin="https?://drive\.google\.com"
+                           path="/uc(.*)"
+                           handler="cacheFirst"></platinum-sw-fetch>
+    </platinum-sw-register>
     <my-app></my-app>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
-    <!-- Built with love using Polymer Starter Kit -->
   </body>
 </html>

@@ -15,24 +15,21 @@
 
     <div class="card">
       <h1>[[scene.planetName]]</h1>
-      <p>[[scene.location]]</p>
-
-      <p>scene.ambientVolume: [[scene.ambientVolume]]</p>
-      <p>scene.musicVolume: [[scene.musicVolume]]</p>
+      <p>[[scene.location]], [[scene.timeOfDay]]</p>
 
       <google-youtube
         id="ambientPlayer"
         on-google-youtube-ready="setVolume"
+        on-google-youtube-state-change="replay"
         video-id="{{scene.ambientYoutubeID}}">
       </google-youtube>
       <paper-input label="Ambient sounds YouTube video ID" value="{{scene.ambientYoutubeID}}"></paper-input>
 
       <google-youtube
         id="musicPlayer"
-        on-google-youtube-ready="play"
-        volume="{{scene.musicVolume}}"
+        on-google-youtube-ready="setVolume"
+        on-google-youtube-state-change="replay"
         video-id="{{scene.musicYoutubeID}}">
-        
       </google-youtube>
       <paper-input label="BG music YouTube video ID" value="{{scene.musicYoutubeID}}"></paper-input>
 
@@ -45,16 +42,28 @@
 
       static get properties() {
         return {
-          scene: Object
+          scene: Object,
+          isPreviewing: Boolean
         };
       }
 
-      play(event) {
-        event.target.play();
+      replay(event) {
+        if (event.target.state === 0) // 0 is stopped.
+        {
+          event.target.play();
+        }
       }
 
       setVolume(event) {
-        event.target.setVolume(10);
+        console.dir(event.target);
+        if (event.target.id === "musicPlayer")
+        {
+          event.target.setVolume(this.scene.musicVolume);
+        }
+        else if (event.target.id === "ambientPlayer")
+        {
+          event.target.setVolume(this.scene.ambientVolume);
+        }
       }
     }
 

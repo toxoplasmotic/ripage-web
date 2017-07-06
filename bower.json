@@ -21,7 +21,8 @@
     "iron-image": "PolymerElements/iron-image#2.0-preview",
     "paper-card": "PolymerElements/paper-card#2.0-preview",
     "google-youtube": "GoogleWebComponents/google-youtube#2.0-preview",
-    "paper-input": "PolymerElements/paper-input#2.0-preview"
+    "paper-input": "PolymerElements/paper-input#2.0-preview",
+    "platinum-sw": "PolymerElements/platinum-sw#2.0-preview"
   },
   "resolutions": {
     "polymer": "^2.0.0-rc.3"
