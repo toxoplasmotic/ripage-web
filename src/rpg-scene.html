@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-scene">
@@ -33,6 +34,13 @@
       </google-youtube>
       <paper-input label="BG music YouTube video ID" value="{{scene.musicYoutubeID}}"></paper-input>
 
+      <template is="dom-if" if="{{isPreviewing}}">
+        <paper-button raised on-click="togglePreview">Preview Off</paper-button>
+      </template>
+      <template is="dom-if" if="{{!isPreviewing}}">
+        <paper-button raised on-click="togglePreview">Preview On</paper-button>
+      </template>
+
     </div>
   </template>
 
@@ -43,7 +51,10 @@
       static get properties() {
         return {
           scene: Object,
-          isPreviewing: Boolean
+          isPreviewing: {
+            type: Boolean,
+            value: false
+          }
         };
       }
 
@@ -51,6 +62,24 @@
         if (event.target.state === 0) // 0 is stopped.
         {
           event.target.play();
+        }
+      }
+
+      togglePreview(event) {
+        this.isPreviewing = !this.isPreviewing;
+        
+        if (this.isPreviewing) {
+          this.$.ambientPlayer.seekTo(0);
+          this.$.ambientPlayer.play();
+
+          this.$.musicPlayer.seekTo(0);
+          this.$.musicPlayer.play();
+        } else {
+          this.$.ambientPlayer.pause();
+          this.$.ambientPlayer.seekTo(0);
+
+          this.$.musicPlayer.pause();
+          this.$.musicPlayer.seekTo(0);
         }
       }
 
