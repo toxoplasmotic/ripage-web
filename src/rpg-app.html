@@ -88,7 +88,7 @@
         <app-toolbar>Ripage</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="characters" href="characters">Characters</a>
-          <a name="scenes" href="scenes">Scenes</a>
+          <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
         </iron-selector>
       </app-drawer>
 
@@ -99,7 +99,8 @@
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <template is="dom-if" if="{{signedIn}}">
-              <div main-title>Welcome, [[user.email]]</div>
+              <div main-title>Signed is as [[user.email]]</div>
+              <paper-button raised on-click="signOut">Sign Out</paper-button>
             </template>
             <template is="dom-if" if="{{!signedIn}}">
               <paper-button raised on-click="signIn">Sign In</paper-button>
@@ -107,17 +108,19 @@
           </app-toolbar>
         </app-header>
 
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
-          <rpg-scenes name="scenes" scenes="{{scenes}}">
-            <paper-button raised on-click="addScene">Add Scene</paper-button>
-          </rpg-scenes>
-          <rpg-characters name="characters" user="{{user}}"></rpg-characters>
-          <rpg-view404 name="view404"></rpg-view404>
-        </iron-pages>
+        <template is="dom-if" if="{{signedIn}}">
+          <iron-pages
+              selected="[[page]]"
+              attr-for-selected="name"
+              fallback-selection="view404"
+              role="main">
+            <rpg-scenes name="scenes" scenes="{{scenes}}">
+              <paper-button raised on-click="addScene">Add Scene</paper-button>
+            </rpg-scenes>
+            <rpg-characters name="characters" user="{{user}}"></rpg-characters>
+            <rpg-view404 name="view404"></rpg-view404>
+          </iron-pages>
+        </template>
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -183,8 +186,8 @@
         }
 
         // If no page was found in the route data, page will be an empty string.
-        // Deault to 'scenes' in that case.
-        this.page = page || 'scenes';
+        // Deault to 'characters' in that case.
+        this.page = page || 'characters';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
