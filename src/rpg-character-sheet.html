@@ -1,0 +1,30 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="rpg-character">
+  <template>
+
+    <style include="shared-styles">
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+
+  </template>
+
+  <script>
+    class RPGCharacterSheet extends Polymer.Element {
+      static get is() { return 'rpg-character-sheet'; }
+
+      static get properties() {
+        return {
+          character: Object
+        };
+      }
+    }
+
+    window.customElements.define(RPGCharacterSheet.is, RPGCharacterSheet);
+  </script>
+</dom-module>

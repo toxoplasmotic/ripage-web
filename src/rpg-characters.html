@@ -1,9 +1,29 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="rpg-character.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-characters">
+
+<style include="shared-styles">
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .character-header { @apply --paper-font-headline; }
+      .character-light { color: var(--paper-grey-600); }
+      .character-race {
+        float: right;
+        font-size: 15px;
+        vertical-align: middle;
+      }
+      .character-opensheet { color: var(--google-blue-500); }
+    </style>
+
   <template>
     <!-- Make a request to the Sheets API to get the tab names from the master spreadsheet -->
     <iron-ajax
@@ -26,10 +46,30 @@
       handle-as="json"
       on-response="handlePortraitsResponse"
       url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKR3U0MElvYkp2anM%27%20in%20parents%20and%20name%20contains%20%27.png%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
-
-    <template is="dom-repeat" items="{{characters}}" as="character">
-      <rpg-character character="{{character}}"></rpg-character>
-    </template>
+    
+      <template is="dom-repeat" items="[[characters]]" as="character">
+      
+      <div>
+        <img class="character-portrait" style="width: 100px; border-radius: 50%;" src="[[character.portraitURL]]" />
+        <div class="card-content">
+          <div class="character-header">[[character.characterName]]
+            <div class="character-race character-light">
+              <span>Human</span>
+            </div>
+          </div>
+          <p>Level: 16</p>
+          <p class="character-light">Mauris in nulla quis lacus venenatis congue. Curabitur nec consectetur magna.</p>
+        </div>
+        <div class="card-actions">
+          <div class="horizontal justified">
+            <template is="dom-if" if="[[character.isUser]]">
+              <paper-button class="character-opensheet">Open Character Sheet</paper-button>
+            </template>
+          </div>
+        </div>
+      </div>
+      </template>
+    
     <slot></slot>
   </template>
 
@@ -42,6 +82,10 @@
           characters: Array,
           user: Object
         };
+      }
+
+      _getMyCharacters(characters){
+        return(characters.map)
       }
 
       handleSheetsResponse(data){
