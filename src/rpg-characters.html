@@ -49,25 +49,25 @@
     
       <template is="dom-repeat" items="[[characters]]" as="character">
       
-      <div>
-        <img class="character-portrait" style="width: 100px; border-radius: 50%;" src="[[character.portraitURL]]" />
-        <div class="card-content">
-          <div class="character-header">[[character.characterName]]
-            <div class="character-race character-light">
-              <span>Human</span>
+        <paper-card>
+          <img class="character-portrait" style="width: 100px; border-radius: 50%;" src="[[character.portraitURL]]" />
+          <div class="card-content">
+            <div class="character-header">[[character.characterName]]
+              <div class="character-race character-light">
+                <span>[[character.race]]</span>
+              </div>
             </div>
+            <p>[[character.job]]</p>
           </div>
-          <p>Level: 16</p>
-          <p class="character-light">Mauris in nulla quis lacus venenatis congue. Curabitur nec consectetur magna.</p>
-        </div>
-        <div class="card-actions">
-          <div class="horizontal justified">
-            <template is="dom-if" if="[[character.isUser]]">
-              <paper-button class="character-opensheet">Open Character Sheet</paper-button>
-            </template>
-          </div>
-        </div>
-      </div>
+          <!-- <div class="card-actions">
+            <div class="horizontal justified">
+              <template is="dom-if" if="[[character.isUser]]">
+                <paper-button class="character-opensheet">Open Character Sheet</paper-button>
+              </template>
+            </div>
+          </div> -->
+        </paper-card>
+
       </template>
     
     <slot></slot>
@@ -101,6 +101,8 @@
       }
 
       handleCharactersResponse(data){
+        var temp;
+
         var hyperlinks = data.detail.response.valueRanges.map((item) => {
           if (item.values[0][0] === "Character:")
           {
@@ -110,26 +112,56 @@
 
         var that = this;
 
-        this.characters = hyperlinks.filter(h => h).map((hyperlink) => {
-          var playerEmail = hyperlink.split('"')[1];
+that.characters = [];
 
-          if (playerEmail)
-          {
-            return {
-              playerEmail: playerEmail.substring(7),
-              characterName: hyperlink.split('"')[3],
-              isUser: that.user.email === playerEmail.substring(7),
-              isNPC: false
-            };
+        data.detail.response.valueRanges.forEach((item) => {
+          if (item.values[0][0] === "Character:" && item.values[0][1].length > 0)
+          {// valid character
+            var hyperlink = item.values[0][1];
+            var playerEmail = hyperlink.split('"')[1];
+            var character = {};
+
+            if (playerEmail)
+            {
+                character.playerEmail = playerEmail.substring(7);
+                character.characterName = hyperlink.split('"')[3];
+                character.isUser = (that.user.email === playerEmail.substring(7));
+            }
+            else
+            {
+                character.characterName = hyperlink;
+                character.isNPC = true;
+            }
+
+            character.race = item.values[1][1];
+            character.job = item.values[2][3];
+
+            that.characters.push(character);
           }
-          else
-          {
-            return {
-              characterName: hyperlink,
-              isNPC: true
-            };
-          }
-         });
+        });
+
+        
+
+        // this.characters = hyperlinks.filter(h => h).map((hyperlink) => {
+        //   var playerEmail = hyperlink.split('"')[1];
+
+        //   if (playerEmail)
+        //   {
+        //     return {
+        //       playerEmail: playerEmail.substring(7),
+        //       characterName: hyperlink.split('"')[3],
+        //       isUser: that.user.email === playerEmail.substring(7),
+        //       isNPC: false
+        //     };
+        //   }
+        //   else
+        //   {
+        //     return {
+        //       characterName: hyperlink,
+        //       isNPC: true
+        //     };
+        //   }
+        //  });
 
          var portraitsResponse = {
           "kind": "drive#fileList",
