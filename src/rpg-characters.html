@@ -45,7 +45,7 @@
       id="portraitsAjax"
       handle-as="json"
       on-response="handlePortraitsResponse"
-      url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKR3U0MElvYkp2anM%27%20in%20parents%20and%20name%20contains%20%27.png%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
+      url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKQk9KeE9rcG8wYVU%27%20in%20parents%20and%20name%20contains%20%27.jpg%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
     
       <template is="dom-repeat" items="[[characters]]" as="character">
       
@@ -93,7 +93,7 @@
         var params = { 
           "key": "AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo",
           "valueRenderOption": "FORMULA",
-          "ranges": sheetTitles.map(title => "'" + title + "'!A1:B1")
+          "ranges": sheetTitles.map(title => "'" + title + "'!A1:F3")
         };
 
         this.$.charactersAjax.params = params;
@@ -102,7 +102,7 @@
 
       handleCharactersResponse(data){
         var hyperlinks = data.detail.response.valueRanges.map((item) => {
-          if (item.values[0].length === 2 && item.values[0][0] === "Character:")
+          if (item.values[0][0] === "Character:")
           {
             return item.values[0][1];
           }
@@ -118,14 +118,15 @@
             return {
               playerEmail: playerEmail.substring(7),
               characterName: hyperlink.split('"')[3],
-              isUser: that.user.email === playerEmail.substring(7)
+              isUser: that.user.email === playerEmail.substring(7),
+              isNPC: false
             };
           }
           else
           {
             return {
-              playerEmail: "???", // Thanks, Malzith!
-              characterName: hyperlink
+              characterName: hyperlink,
+              isNPC: true
             };
           }
          });
@@ -136,57 +137,63 @@
           "files": [
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKSllTb2pHWjloeTA",
-            "name": "Gizmo.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKdmFjN01Va0RCeEk",
+            "name": "Angeleigh.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKU0FHX2xCamlYbm8",
-            "name": "Tex.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKb3hKWTlKd3QxQjg",
+            "name": "Kujo.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKY19CLTgzQ1pQSWs",
-            "name": "Sofi.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKb0NFaWtUX1ZNT0k",
+            "name": "Tex.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKMWVLUzFicHpoc2c",
-            "name": "Mokomi.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKa0RuQmU4bWdTaGc",
+            "name": "Mokomi.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKeV93NlRtTkZWSjQ",
-            "name": "Malzith.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKakpKMTNNdGZhYTA",
+            "name": "Kalder.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKZkZKWnBJWHRIX2s",
-            "name": "Kujo.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKYlMwVjMwTFpRek0",
+            "name": "Jim.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKZTBPdGFvTGRWRmM",
-            "name": "Kalder.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKWk9OdE94YnFydE0",
+            "name": "Gizmo.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKRWxIdFFWdEdqQ3c",
-            "name": "Jim.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKUVNSVFluSFlBMVk",
+            "name": "Sofi.jpg",
+            "mimeType": "image/jpeg"
             },
             {
             "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKTk1Fd1kxVU1zVDQ",
-            "name": "Jax.png",
-            "mimeType": "image/png"
+            "id": "0B-g6W4lSp4lKMW9vWTZ3dWxzVEU",
+            "name": "Malzith.jpg",
+            "mimeType": "image/jpeg"
+            },
+            {
+            "kind": "drive#file",
+            "id": "0B-g6W4lSp4lKUVhucmdVZHRESUU",
+            "name": "Jax.jpg",
+            "mimeType": "image/jpeg"
             }
           ]
           };
