@@ -1,7 +1,7 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "ripage-web",
   "authors": [
-    "The Polymer Authors"
+    "Matt Luceen"
   ],
   "license": "https://polymer.github.io/LICENSE.txt",
   "dependencies": {
@@ -22,7 +22,9 @@
     "paper-card": "PolymerElements/paper-card#2.0-preview",
     "google-youtube": "GoogleWebComponents/google-youtube#2.0-preview",
     "paper-input": "PolymerElements/paper-input#2.0-preview",
-    "paper-styles": "PolymerElements/paper-styles#2.0-preview"
+    "paper-styles": "PolymerElements/paper-styles#2.0-preview",
+    "paper-item": "PolymerElements/paper-item#2.0-preview",
+    "paper-listbox": "PolymerElements/paper-listbox#2.0-preview"
   },
   "resolutions": {
     "polymer": "^2.0.0-rc.3"

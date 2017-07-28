@@ -17,7 +17,7 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="rpg-icons.html">
 
-<link rel="lazy-import" href="rpg-characters.html">
+<link rel="lazy-import" href="rpg-characters.html?v=0.02">
 <link rel="lazy-import" href="rpg-character-sheet.html">
 <link rel="lazy-import" href="rpg-scenes.html">
 <link rel="lazy-import" href="rpg-scene.html">
@@ -102,14 +102,13 @@
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            
-            <div main-title>[[page]]</div>
-          <template is="dom-if" if="[[signedIn]]">
-          <paper-button raised on-click="signOut">Sign Out</paper-button>
-        </template>
-        <template is="dom-if" if="[[!signedIn]]">
-          <paper-button raised on-click="signIn">Sign In</paper-button>
-        </template>
+            <template is="dom-if" if="[[signedIn]]">
+              <div main-title>[[page]]</div>
+              <paper-button raised on-click="signOut">Sign Out</paper-button>
+            </template>
+            <template is="dom-if" if="[[!signedIn]]">
+              <paper-button raised on-click="signIn">Sign In</paper-button>
+            </template>
           </app-toolbar>
         </app-header>
 

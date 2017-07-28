@@ -1,28 +1,25 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-shared-styles.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-characters">
 
-<style include="shared-styles">
-      body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .character-header { @apply --paper-font-headline; }
-      .character-light { color: var(--paper-grey-600); }
-      .character-race {
-        float: right;
-        font-size: 15px;
-        vertical-align: middle;
-      }
-      .character-opensheet { color: var(--google-blue-500); }
-    </style>
+  <style include="shared-styles">
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 
   <template>
     <!-- Make a request to the Sheets API to get the tab names from the master spreadsheet -->
@@ -47,30 +44,20 @@
       on-response="handlePortraitsResponse"
       url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKQk9KeE9rcG8wYVU%27%20in%20parents%20and%20name%20contains%20%27.jpg%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
     
+    <paper-listbox>
       <template is="dom-repeat" items="[[characters]]" as="character">
-      
-        <paper-card>
-          <img class="character-portrait" style="width: 100px; border-radius: 50%;" src="[[character.portraitURL]]" />
-          <div class="card-content">
-            <div class="character-header">[[character.characterName]]
-              <div class="character-race character-light">
-                <span>[[character.race]]</span>
-              </div>
+          <paper-icon-item>
+            <div class="avatar" slot="item-icon">
+              <img class="character-portrait" onerror="this.src = 'https://drive.google.com/uc?id=0B-g6W4lSp4lKMTNLZ0dVd2gzTjA';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
             </div>
-            <p>[[character.job]]</p>
-          </div>
-          <!-- <div class="card-actions">
-            <div class="horizontal justified">
-              <template is="dom-if" if="[[character.isUser]]">
-                <paper-button class="character-opensheet">Open Character Sheet</paper-button>
-              </template>
-            </div>
-          </div> -->
-        </paper-card>
-
+            <paper-item-body two-line>
+              <div>[[character.characterName]]</div>
+              <div secondary>[[character.race]], [[character.job]] <template is="dom-if" if="[[character.isUser]]">(this is you)</template></div>
+            </paper-item-body>
+          </paper-icon-item>
       </template>
-    
-    <slot></slot>
+      <slot></slot>
+    </paper-listbox>
   </template>
 
   <script>
@@ -101,18 +88,8 @@
       }
 
       handleCharactersResponse(data){
-        var temp;
-
-        var hyperlinks = data.detail.response.valueRanges.map((item) => {
-          if (item.values[0][0] === "Character:")
-          {
-            return item.values[0][1];
-          }
-        });
-
         var that = this;
-
-that.characters = [];
+        that.characters = [];
 
         data.detail.response.valueRanges.forEach((item) => {
           if (item.values[0][0] === "Character:" && item.values[0][1].length > 0)
@@ -126,6 +103,7 @@ that.characters = [];
                 character.playerEmail = playerEmail.substring(7);
                 character.characterName = hyperlink.split('"')[3];
                 character.isUser = (that.user.email === playerEmail.substring(7));
+                console.dir(character);
             }
             else
             {
@@ -139,29 +117,6 @@ that.characters = [];
             that.characters.push(character);
           }
         });
-
-        
-
-        // this.characters = hyperlinks.filter(h => h).map((hyperlink) => {
-        //   var playerEmail = hyperlink.split('"')[1];
-
-        //   if (playerEmail)
-        //   {
-        //     return {
-        //       playerEmail: playerEmail.substring(7),
-        //       characterName: hyperlink.split('"')[3],
-        //       isUser: that.user.email === playerEmail.substring(7),
-        //       isNPC: false
-        //     };
-        //   }
-        //   else
-        //   {
-        //     return {
-        //       characterName: hyperlink,
-        //       isNPC: true
-        //     };
-        //   }
-        //  });
 
          var portraitsResponse = {
           "kind": "drive#fileList",
@@ -238,7 +193,6 @@ that.characters = [];
             }
           });
 
-          console.dir(that.characters);
       }
 
       handlePortraitsResponse(data){
