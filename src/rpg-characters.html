@@ -19,9 +19,23 @@
       align-items: center;
       justify-content: center;
     }
+
+    .character a
+    {
+        text-decoration: none !important;
+    }
   </style>
 
   <template>
+
+  <style>
+    .character a:hover, a:visited, a:link, a:active
+    {
+      color:inherit;
+      text-decoration: none;
+    }
+  </style>
+
     <!-- Make a request to the Sheets API to get the tab names from the master spreadsheet -->
     <iron-ajax
       auto
@@ -44,20 +58,22 @@
       on-response="handlePortraitsResponse"
       url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKQk9KeE9rcG8wYVU%27%20in%20parents%20and%20name%20contains%20%27.jpg%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
     
-    <paper-listbox>
-      <template is="dom-repeat" items="[[characters]]" as="character">
-          <paper-icon-item>
-            <div class="avatar" slot="item-icon">
-              <img class="character-portrait" onerror="this.src = 'https://drive.google.com/uc?id=0B-g6W4lSp4lKMTNLZ0dVd2gzTjA';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
-            </div>
-            <paper-item-body two-line>
-              <div>[[character.characterName]]</div>
-              <div secondary>[[character.race]], [[character.job]] <template is="dom-if" if="[[character.isUser]]">(this is you)</template></div>
-            </paper-item-body>
-          </paper-icon-item>
-      </template>
-      <slot></slot>
-    </paper-listbox>
+      <div class="character">
+        <template is="dom-repeat" items="[[characters]]" as="character">
+          <a href="/characters/[[character.characterName]]" tabindex="-1">
+            <paper-icon-item>
+              <div class="avatar" slot="item-icon">
+                <img class="character-portrait" onerror="this.src = 'https://drive.google.com/uc?id=0B-g6W4lSp4lKMTNLZ0dVd2gzTjA';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
+              </div>
+              <paper-item-body two-line>
+                <div>[[character.characterName]]</div>
+                <div secondary>[[character.race]], [[character.job]] <template is="dom-if" if="[[character.isUser]]">(this is you)</template></div>
+              </paper-item-body>
+            </paper-icon-item>
+          </a>
+        </template>
+      </div>
+
   </template>
 
   <script>
@@ -69,10 +85,6 @@
           characters: Array,
           user: Object
         };
-      }
-
-      _getMyCharacters(characters){
-        return(characters.map)
       }
 
       handleSheetsResponse(data){
