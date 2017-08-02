@@ -47,14 +47,11 @@
       app-header {
         color: #fff;
         background-color: var(--app-primary-color);
+        text-transform: capitalize;
       }
 
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
-      }
-
-      app-toolbar {
-        text-transform: capitalize;
       }
 
       .drawer-list {
@@ -96,7 +93,7 @@
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer">
-        <app-toolbar>The Ripage</app-toolbar>
+        <app-toolbar>The&nbsp;<span style="font-weight: bold; color: red;">R</span> ipage</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="characters" href="characters">Characters</a>
           <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
