@@ -37,6 +37,13 @@
         display: none;
       }
 
+        app-drawer {
+        --app-drawer-content-container: {
+          box-shadow: 1px 0 2px 1px rgba(0,0,0,0.18);
+        }
+        --app-drawer-scrim-background: rgba(179, 157, 219, 0.5);
+      }
+
       app-header {
         color: #fff;
         background-color: var(--app-primary-color);
@@ -89,7 +96,7 @@
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer">
-        <app-toolbar>Ripage</app-toolbar>
+        <app-toolbar>The Ripage</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="characters" href="characters">Characters</a>
           <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
