@@ -17,6 +17,7 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="rpg-icons.html">
 <link rel="import" href="rpg-auth-button.html">
+<link rel="import" href="rpg-home.html">
 
 <link rel="lazy-import" href="rpg-characters.html?v=0.03">
 <link rel="lazy-import" href="rpg-character-sheet.html">
@@ -53,6 +54,11 @@
 
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
+      }
+
+      app-toolbar a:hover, a:visited, a:link, a:active {
+        color:inherit;
+        text-decoration: none;
       }
 
       .drawer-list {
@@ -101,15 +107,18 @@
 
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
-      <template is="dom-if" if="[[signedIn]]">
+      
         <app-drawer id="drawer" slot="drawer">
-          <app-toolbar>The&nbsp;<span style="font-weight: bold; color: #d20a11;">R</span> ipage</app-toolbar>
-          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="characters" href="characters">Characters</a>
-            <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
-          </iron-selector>
+          <app-toolbar><a href="/">The&nbsp;<span style="font-weight: bold; color: #d20a11;">R</span>ipage</a></app-toolbar>
+          <template is="dom-if" if="[[signedIn]]">
+            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+              <a name="home" href="/">Home</a>
+              <a name="characters" href="characters">Characters</a>
+              <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
+            </iron-selector>
+          </template>
         </app-drawer>
-      </template>
+      
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
@@ -121,7 +130,7 @@
               <rpg-auth-button on-click="signOut">Sign out</rpg-auth-button>
             </template>
             <template is="dom-if" if="[[!signedIn]]">
-              <div main-title>The Ripage</div>
+              <div main-title></div>
               <rpg-auth-button raised on-click="signIn">Sign in with Google</rpg-auth-button>
             </template>
           </app-toolbar>
@@ -132,10 +141,12 @@
               attr-for-selected="name"
               fallback-selection="view404"
               role="main">
+            <rpg-home name="home"></rpg-home>
+            <rpg-characters name="characters" user="{{user}}"></rpg-characters>
             <rpg-scenes name="scenes" scenes="{{scenes}}">
               <paper-button raised on-click="addScene">Add Scene</paper-button>
             </rpg-scenes>
-            <rpg-characters name="characters" user="{{user}}"></rpg-characters>
+           
             <rpg-view404 name="view404"></rpg-view404>
           </iron-pages>
         </template>
@@ -204,8 +215,8 @@
         }
 
         // If no page was found in the route data, page will be an empty string.
-        // Deault to 'characters' in that case.
-        this.page = page || 'characters';
+        // Deault to 'home' in that case.
+        this.page = page || "home";
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {

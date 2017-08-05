@@ -1,0 +1,35 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="rpg-home">
+  <template>
+
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      paper-card {
+        margin: 20px;
+        padding: 20px;
+      }
+    </style>
+
+    <div>
+      <paper-card image="https://firebasestorage.googleapis.com/v0/b/ripageweb.appspot.com/o/Ripage%2Fgalaxy.jpg?alt=media&token=72c6e9b9-a256-4f4c-80d1-07ab39d8c8bd">
+        <p>The Ripage Universe can span galaxies, times, and dimensions. Most of the story, however, focuses on a few inhabited planets which are in somewhat close proximity to each other. Different civilizations have formed and many have gained interplanetary forms of transportation.</p>
+      </paper-card>
+    </div>
+  </template>
+
+  <script>
+    class RPGHome extends Polymer.Element {
+      static get is() { return 'rpg-home'; }
+    }
+
+    window.customElements.define(RPGHome.is, RPGHome);
+  </script>
+</dom-module>
