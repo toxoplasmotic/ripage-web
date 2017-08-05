@@ -16,6 +16,7 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="rpg-icons.html">
+<link rel="import" href="rpg-auth-button.html">
 
 <link rel="lazy-import" href="rpg-characters.html?v=0.03">
 <link rel="lazy-import" href="rpg-character-sheet.html">
@@ -37,7 +38,7 @@
         display: none;
       }
 
-        app-drawer {
+      app-drawer {
         --app-drawer-content-container: {
           box-shadow: 1px 0 2px 1px rgba(0,0,0,0.18);
         }
@@ -70,6 +71,14 @@
         color: black;
         font-weight: bold;
       }
+
+      .auth {
+        display: flex;
+      }
+
+      .auth > rpg-auth-button {
+        margin-left: auto;
+      }
     </style>
 
     <firebase-app
@@ -92,31 +101,32 @@
 
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer">
-        <app-toolbar>The&nbsp;<span style="font-weight: bold; color: #d20a11;">R</span> ipage</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="characters" href="characters">Characters</a>
-          <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
-        </iron-selector>
-      </app-drawer>
+      <template is="dom-if" if="[[signedIn]]">
+        <app-drawer id="drawer" slot="drawer">
+          <app-toolbar>The&nbsp;<span style="font-weight: bold; color: #d20a11;">R</span> ipage</app-toolbar>
+          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <a name="characters" href="characters">Characters</a>
+            <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
+          </iron-selector>
+        </app-drawer>
+      </template>
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
-
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <template is="dom-if" if="[[signedIn]]">
               <div main-title>[[page]]</div>
-              <paper-button raised on-click="signOut">Sign Out</paper-button>
+              <rpg-auth-button on-click="signOut">Sign out</rpg-auth-button>
             </template>
             <template is="dom-if" if="[[!signedIn]]">
-              <paper-button raised on-click="signIn">Sign In</paper-button>
+              <div main-title>The Ripage</div>
+              <rpg-auth-button raised on-click="signIn">Sign in with Google</rpg-auth-button>
             </template>
           </app-toolbar>
         </app-header>
-
-        <template is="dom-if" if="{{signedIn}}">
+        <template is="dom-if" if="[[signedIn]]">
           <iron-pages
               selected="[[page]]"
               attr-for-selected="name"
