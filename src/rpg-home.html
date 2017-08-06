@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-home">
@@ -14,13 +15,25 @@
 
       paper-card {
         margin: 20px;
-        padding: 20px;
+      }
+
+      .card-actions a {
+        color:inherit;
+        text-decoration: none;
       }
     </style>
 
     <div>
       <paper-card image="https://firebasestorage.googleapis.com/v0/b/ripageweb.appspot.com/o/Ripage%2Fgalaxy.jpg?alt=media&token=72c6e9b9-a256-4f4c-80d1-07ab39d8c8bd">
-        <p>The Ripage Universe can span galaxies, times, and dimensions. Most of the story, however, focuses on a few inhabited planets which are in somewhat close proximity to each other. Different civilizations have formed and many have gained interplanetary forms of transportation.</p>
+        <p class="card-content">The Ripage Universe can span galaxies, times, and dimensions. Most of the story, however, focuses on a few inhabited planets which are in somewhat close proximity to each other. Different civilizations have formed and many have gained interplanetary forms of transportation.</p>
+        <div class="card-actions">
+          <a href="http://ripage.pbworks.com" target="_blank" tabindex="-1">
+            <paper-button>Wiki</paper-button>
+          </a>
+          <a href="https://docs.google.com/document/d/125N34zmf5J-9Dg3VvAp-a3FwOcnCROdVxZwaodNnxbY/edit?usp=sharing" target="_blank" tabindex="-1">
+            <paper-button>Mechanics</paper-button>
+          </a>
+        </div>
       </paper-card>
     </div>
   </template>
