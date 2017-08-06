@@ -23,7 +23,6 @@
 <link rel="lazy-import" href="rpg-character-sheet.html">
 <link rel="lazy-import" href="rpg-scenes.html">
 <link rel="lazy-import" href="rpg-scene.html">
-<link rel="lazy-import" href="rpg-view404.html">
 
 <dom-module id="rpg-app">
   <template>
@@ -140,15 +139,13 @@
           <iron-pages
               selected="[[page]]"
               attr-for-selected="name"
-              fallback-selection="view404"
+              fallback-selection="home"
               role="main">
             <rpg-home name="home"></rpg-home>
             <rpg-characters name="characters" user="{{user}}"></rpg-characters>
             <rpg-scenes name="scenes" scenes="{{scenes}}">
               <paper-button raised on-click="addScene">Add Scene</paper-button>
             </rpg-scenes>
-           
-            <rpg-view404 name="view404"></rpg-view404>
           </iron-pages>
         </template>
       </app-header-layout>
@@ -193,7 +190,7 @@
       }
 
       signIn() {
-        this.$.auth.signInWithPopup();
+        this.$.auth.signInWithRedirect();
       }
 
       signOut() {
@@ -236,7 +233,7 @@
       }
 
       _showPage404() {
-        this.page = 'view404';
+        this.page = 'home';
       }
     }
 
