@@ -46,19 +46,12 @@
       on-response="handleCharactersResponse"
       url="https://sheets.googleapis.com/v4/spreadsheets/1oZv1ZsaSjXGjZfpGGY0UbZ6ZF5Tb65yDuN2UIB3vo5o/values:batchGet"></iron-ajax>
 
-    <!-- Get character portraits from Google Drive API -->
-    <iron-ajax
-      id="portraitsAjax"
-      handle-as="json"
-      on-response="handlePortraitsResponse"
-      url="https://www.googleapis.com/drive/v3/files?q=%270B-g6W4lSp4lKQk9KeE9rcG8wYVU%27%20in%20parents%20and%20name%20contains%20%27.jpg%27&key=AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"></iron-ajax>
-    
       <div class="character">
         <template is="dom-repeat" items="[[characters]]" as="character">
           <a href="/characters/[[character.characterName]]" tabindex="-1">
             <paper-icon-item>
               <div class="avatar" slot="item-icon">
-                <img class="character-portrait" onerror="this.src = 'https://drive.google.com/uc?id=0B-g6W4lSp4lKMTNLZ0dVd2gzTjA';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
+                <img class="character-portrait" onerror="this.src = 'https://firebasestorage.googleapis.com/v0/b/ripageweb.appspot.com/o/Character%20Portraits%2FSmall%2FUnknown%20NPC%20Ominous.jpg?alt=media';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
               </div>
               <paper-item-body two-line>
                 <div>[[character.characterName]]</div>
@@ -95,6 +88,7 @@
       }
 
       handleCharactersResponse(data){
+        console.log('handleCharactersResponse');
         var that = this;
         that.characters = [];
 
@@ -110,7 +104,6 @@
                 character.playerEmail = playerEmail.substring(7);
                 character.characterName = hyperlink.split('"')[3];
                 character.isUser = (that.user.email === playerEmail.substring(7));
-                console.dir(character);
             }
             else
             {
@@ -120,95 +113,8 @@
 
             character.race = item.values[1][1];
             character.job = item.values[2][3];
-
+            character.portraitURL = "https://firebasestorage.googleapis.com/v0/b/ripageweb.appspot.com/o/Character%20Portraits%2FSmall%2F" + character.characterName + ".jpg?alt=media";
             that.characters.push(character);
-          }
-        });
-
-         var portraitsResponse = {
-          "kind": "drive#fileList",
-          "incompleteSearch": false,
-          "files": [
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKdmFjN01Va0RCeEk",
-            "name": "Angeleigh.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKb3hKWTlKd3QxQjg",
-            "name": "Kujo.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKb0NFaWtUX1ZNT0k",
-            "name": "Tex.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKa0RuQmU4bWdTaGc",
-            "name": "Mokomi.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKakpKMTNNdGZhYTA",
-            "name": "Kalder.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKYlMwVjMwTFpRek0",
-            "name": "Jim.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKWk9OdE94YnFydE0",
-            "name": "Gizmo.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKUVNSVFluSFlBMVk",
-            "name": "Sofi.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKMW9vWTZ3dWxzVEU",
-            "name": "Malzith.jpg",
-            "mimeType": "image/jpeg"
-            },
-            {
-            "kind": "drive#file",
-            "id": "0B-g6W4lSp4lKUVhucmdVZHRESUU",
-            "name": "Jax.jpg",
-            "mimeType": "image/jpeg"
-            }
-          ]
-          };
-
-          portraitsResponse.files.forEach(function(file) {
-            var character = that.characters.find(x => x.characterName === file.name.split('.')[0]);
-            if (character)
-            {
-              character.portraitURL = "https://drive.google.com/uc?id=" + file.id;
-            }
-          });
-
-      }
-
-      handlePortraitsResponse(data){
-        var that = this;
-        data.detail.response.files.forEach(function(file) {
-          var character = that.characters.find(x => x.characterName === file.name.split('.')[0]);
-          if (character)
-          {
-            character.portraitURL = "https://drive.google.com/uc?id=" + file.id;
           }
         });
       }
