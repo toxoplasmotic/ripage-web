@@ -2,9 +2,9 @@
   "name": "The Ripage",
   "short_name": "The Ripage",
   "start_url": "./?homescreen=1",
-  "display": "standalone",
-  "theme_color": "#3f51b5",
-  "background_color": "#3f51b5",
+  "display": "browser",
+  "theme_color": "#d20a11",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
