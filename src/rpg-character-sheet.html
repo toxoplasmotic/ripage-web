@@ -1,16 +1,28 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="rpg-character">
+<dom-module id="rpg-character-sheet">
   <template>
 
     <style include="shared-styles">
-      body {
+      :host {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: 20px;
+      }
+
+      h1 {
+        padding: 0px 20px;
       }
     </style>
+
+    <paper-card>
+      <h1 id="nameTitle">[[character.characterName]]</h1>
+    </paper-card>
+    
 
   </template>
 
@@ -23,6 +35,7 @@
           character: Object
         };
       }
+
     }
 
     window.customElements.define(RPGCharacterSheet.is, RPGCharacterSheet);

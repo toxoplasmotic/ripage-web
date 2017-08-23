@@ -3,12 +3,10 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
-<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../bower_components/paper-item/paper-item-shared-styles.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="rpg-character.html">
+<link rel="import" href="rpg-character-sheet.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="rpg-characters">
@@ -24,12 +22,21 @@
   <template>
 
   <style>
-    .character a:hover, a:visited, a:link, a:active
+    a:hover, a:visited, a:link, a:active
     {
       color:inherit;
       text-decoration: none;
     }
-  </style>
+</style>
+    <app-location route="{{charactersRoute}}"></app-location>
+    <app-route
+      route="{{charactersRoute}}"
+      pattern="/characters/:selectedCharacterName"
+      data="{{charactersRouteData}}"
+      tail="{{charactersSubroute}}"></app-route>
+    <app-route
+      route="{{charactersRoute}}"
+      pattern="/characters"></app-route>
 
     <!-- Make a request to the Sheets API to get the tab names from the master spreadsheet -->
     <iron-ajax
@@ -39,28 +46,28 @@
       params='{"key": "AIzaSyAUxuo3imQctu6qWm1IY4LB3VyLIj0xcpo"}'
       url="https://sheets.googleapis.com/v4/spreadsheets/1oZv1ZsaSjXGjZfpGGY0UbZ6ZF5Tb65yDuN2UIB3vo5o"></iron-ajax>
 
-    <!-- Using the tab names, use Sheets API to get character names and player email addresses -->
+    <!-- Using the tab names, use Sheets API to get character stats and player email addresses -->
     <iron-ajax
       id="charactersAjax"
       handle-as="json"
       on-response="handleCharactersResponse"
       url="https://sheets.googleapis.com/v4/spreadsheets/1oZv1ZsaSjXGjZfpGGY0UbZ6ZF5Tb65yDuN2UIB3vo5o/values:batchGet"></iron-ajax>
 
-      <div class="character">
-        <template is="dom-repeat" items="[[characters]]" as="character">
-          <a href="/characters/[[character.characterName]]" tabindex="-1">
-            <paper-icon-item>
-              <div class="avatar" slot="item-icon">
-                <img class="character-portrait" onerror="this.src = 'https://firebasestorage.googleapis.com/v0/b/ripageweb.appspot.com/o/Character%20Portraits%2FSmall%2FUnknown%20NPC%20Ominous.jpg?alt=media';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
-              </div>
-              <paper-item-body two-line>
-                <div>[[character.characterName]]</div>
-                <div secondary>[[character.race]], [[character.job]] <template is="dom-if" if="[[character.isUser]]">(this is you)</template></div>
-              </paper-item-body>
-            </paper-icon-item>
-          </a>
-        </template>
-      </div>
+      <neon-animated-pages
+        entry-animation="fade-in-animation"
+        exit-animation="fade-out-animation"
+        selected="[[page]]"
+        attr-for-selected="name"
+        fallback-selection="characters">
+        <neon-animatable name="characters">
+          <template is="dom-repeat" items="[[characters]]" as="character">
+            <rpg-character character="[[character]]"></rpg-character>
+          </template>
+        </neon-animatable>
+        <neon-animatable name="characterSheet">
+          <rpg-character-sheet character="[[selectedCharacter]]"></rpg-character-sheet>
+        </neon-animatable>
+      </neon-animated-pages>
 
   </template>
 
@@ -71,8 +78,28 @@
       static get properties() {
         return {
           characters: Array,
+          page: String,
+          selectedCharacter: Object,
           user: Object
         };
+      }
+
+      static get observers() {
+        return [
+          '_selectedCharacterNameChanged(charactersRouteData.selectedCharacterName)'
+        ];
+      }
+
+      _selectedCharacterNameChanged(name) {
+        this.selectedCharacterName = name;
+        if (name) {
+          this.page = "characterSheet";
+          if (this.characters) {
+            this.selectedCharacter = this.characters.find(x => x.characterName === name);
+          }
+        } else {
+          this.page = "characters";
+        }
       }
 
       handleSheetsResponse(data){
@@ -116,6 +143,10 @@
             that.characters.push(character);
           }
         });
+
+        if (this.selectedCharacterName) {
+          this.selectedCharacter = this.characters.find(x => x.characterName === this.selectedCharacterName);
+        } 
       }
     }
 

@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -100,6 +101,7 @@
     <firebase-document id="settings" path="/settings" data="{{settings}}"></firebase-document>
 
     <app-location route="{{route}}"></app-location>
+
     <app-route
         route="{{route}}"
         pattern="[[rootPattern]]:page"
@@ -114,7 +116,7 @@
           <template is="dom-if" if="[[signedIn]]">
             <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
               <a name="home" href="/">Home</a>
-              <a name="characters" href="characters">Characters</a>
+              <a name="characters" href="characters/">Characters</a>
               <!-- <a name="scenes" href="scenes">Scenes</a> TODO: Phase II -->
             </iron-selector>
           </template>
@@ -136,18 +138,25 @@
             </template>
           </app-toolbar>
         </app-header>
+
         <template is="dom-if" if="[[signedIn]]">
-          <iron-pages
+          <neon-animated-pages
+              entry-animation="fade-in-animation"
+              exit-animation="fade-out-animation"
               selected="[[page]]"
               attr-for-selected="name"
               fallback-selection="home"
               role="main">
-            <rpg-home name="home"></rpg-home>
-            <rpg-characters name="characters" user="{{user}}"></rpg-characters>
-            <rpg-scenes name="scenes" scenes="{{scenes}}">
-              <paper-button raised on-click="addScene">Add Scene</paper-button>
-            </rpg-scenes>
-          </iron-pages>
+            <neon-animatable name="home">
+              <rpg-home></rpg-home>
+            </neon-animatable>
+            <neon-animatable name="characters">
+              <rpg-characters user="{{user}}"></rpg-characters>
+            </neon-animatable>
+            <neon-animatable name="scenes">
+              <rpg-scenes scenes="{{scenes}}"></rpg-scenes>
+            </neon-animatable>
+          </neon-animated-pages>
         </template>
       </app-header-layout>
     </app-drawer-layout>
@@ -190,20 +199,16 @@
         this.rootPattern = (new URL(this.rootPath)).pathname;
       }
 
+       _stringify(obj) {
+        return JSON.stringify(obj);
+      }
+
       signIn() {
         this.$.auth.signInWithRedirect();
       }
 
       signOut() {
         this.$.auth.signOut();
-      }
-
-      addScene() {
-
-      }
-
-      debugMe() {
-        console.dir(this.scenesData);
       }
 
       _routePageChanged(page) {

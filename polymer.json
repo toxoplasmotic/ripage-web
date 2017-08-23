@@ -3,6 +3,7 @@
   "shell": "src/rpg-app.html",
   "fragments": [
     "src/rpg-characters.html",
+    "src/rpg-character.html",
     "src/rpg-character-sheet.html",
     "src/rpg-scenes.html",
     "src/rpg-scene.html",

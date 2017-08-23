@@ -1,0 +1,53 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-shared-styles.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="rpg-character">
+  <template>
+
+    <style include="shared-styles">
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      a:hover, a:visited, a:link, a:active {
+        color:inherit;
+        text-decoration: none;
+      }
+    </style>
+
+    <a href="/characters/[[character.characterName]]" tabindex="-1">
+      <paper-icon-item>
+        <div class="avatar" slot="item-icon">
+          <img class="character-portrait" onerror="this.src = 'https://firebasestorage.googleapis.com/v0/b/ripageweb.appspot.com/o/Character%20Portraits%2FSmall%2FUnknown%20NPC%20Ominous.jpg?alt=media';" style="width: 45px; border-radius: 50%; margin-top: 8px;" src="[[character.portraitURL]]" />
+        </div>
+        <paper-item-body two-line>
+          <div id="characterName">[[character.characterName]]</div>
+          <div secondary>[[character.race]], [[character.job]] <template is="dom-if" if="[[character.isUser]]">(this is you)</template></div>
+        </paper-item-body>
+      </paper-icon-item>
+    </a>
+
+  </template>
+
+  <script>
+    class RPGCharacter extends Polymer.Element {
+      static get is() { return 'rpg-character'; }
+
+      static get properties() {
+        return {
+          character: Object
+        };
+      }
+
+      
+    }
+
+    window.customElements.define(RPGCharacter.is, RPGCharacter);
+  </script>
+</dom-module>
